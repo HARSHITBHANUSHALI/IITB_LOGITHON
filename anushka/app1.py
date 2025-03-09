@@ -26,10 +26,12 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib import colors
 from io import BytesIO
 import uuid
+from dotenv import load_dotenv
+load_dotenv()
 
-
-account_sid = 'AC338d14a32c3fd7d04aa789471a6617e5'
-auth_token = 'c2a0f002936b4a8a62b219f8865ae247'
+import os
+account_sid = os.getenv('ACCOUNT_SID')
+auth_token = os.getenv('AUTH_TOKEN')
 TWILIO_WHATSAPP_NUMBER = "whatsapp:+14155238886"  # Twilio's default sandbox number
 YOUR_PHONE_NUMBER = "+919930679651"  # Example: +919876543210
 client = Client(account_sid, auth_token)
@@ -58,7 +60,7 @@ PDF_PATH = os.path.join(DATA_DIR, 'fedex-international-connect-country-region-sp
 JSON_OUTPUT_PATH = os.path.join(DATA_DIR, 'fedex_country_restrictions.json')
 
 # Gemini API Configuration
-GEMINI_API_KEY = "AIzaSyDqMg4cv_n04wbxo16Bpovc01LXAa96h_I"
+GEMINI_API_KEY = "AIzaSyDeYF3DqZSrkpOZy3cDOZ822GYQO0ZAIGA"
 genai.configure(api_key=GEMINI_API_KEY)
 
 def get_embedding_model():
@@ -998,7 +1000,7 @@ def serve(path):
 from flask import Flask, request, jsonify
 import google.generativeai as genai
 from dotenv import load_dotenv
-GOOGLE_API_KEY = "AIzaSyAWalRIQgdh5JU31vN88y9F8KdrovC6QOo"
+GOOGLE_API_KEY = "AIzaSyDeYF3DqZSrkpOZy3cDOZ822GYQO0ZAIGA"
 genai.configure(api_key=GOOGLE_API_KEY)
 @app.route('/generate', methods=['POST'])
 def generate_text():
