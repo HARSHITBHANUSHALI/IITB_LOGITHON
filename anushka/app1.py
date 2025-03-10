@@ -30,10 +30,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import os
-account_sid = os.getenv('ACCOUNT_SID')
-auth_token = os.getenv('AUTH_TOKEN')
+account_sid ="ACdee89660004023e49d391c96477a2f08"
+auth_token = "d078229a725fef4fcf013bf55865d145"
 TWILIO_WHATSAPP_NUMBER = "whatsapp:+14155238886"  # Twilio's default sandbox number
-YOUR_PHONE_NUMBER = "+919930679651"  # Example: +919876543210
+YOUR_PHONE_NUMBER = "+917977409706"  # Example: +919876543210
 client = Client(account_sid, auth_token)
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')

@@ -1,0 +1,588 @@
+File: australia_to_india.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: brazil_to_india.json
+  - Import Documentation
+  - Export Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: canada_to_india.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: china_to_india.json
+  - Import Documentation
+  - Export Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: france_to_india.json
+  - Import Documentation
+  - Export Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: germany_to_india.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_australia.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Saturday Delivery
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_brazil.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_canada.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Saturday Delivery
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_china.json
+  - Import Documentation
+  - Export Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Saturday Delivery
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_france.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Saturday Delivery
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_germany.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Saturday Delivery
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_italy.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Saturday Delivery
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_japan.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_malaysia.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Saturday Delivery
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_mexico.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Saturday Delivery
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_netherlands.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Saturday Delivery
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_saudi_arabia.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_singapore.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_south_africa.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_south_korea.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_thailand.json
+  - Import Documentation
+  - Export Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_united_arab_emirates.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_united_kingdom.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Saturday Delivery
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: india_to_united_states.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Saturday Delivery
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: italy_to_india.json
+  - Import Documentation
+  - Export Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: japan_to_india.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: malaysia_to_india.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: mexico_to_india.json
+  - Import Documentation
+  - Export Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: netherlands_to_india.json
+  - Import Documentation
+  - Export Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: saudi_arabia_to_india.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: singapore_to_india.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: south_africa_to_india.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: south_korea_to_india.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: thailand_to_india.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: united_arab_emirates_to_india.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: united_kingdom_to_india.json
+  - Import Documentation
+  - Export Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+
+File: united_states_to_india.json
+  - Import Documentation
+  - Clearance Information
+  - Areas Served
+  - Billing Options
+  - Commodity Specific Stipulations
+  - Gift Exemptions
+  - Invoice Requirements
+  - Items Classified as Documents
+  - Prohibited or Restricted Commodities
+  - Service Options
+  - Special Clearance Requirements
+  - Value Limits
+  - Weight and Size Limits
+

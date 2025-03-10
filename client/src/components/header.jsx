@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Package, Info, X, Check, Database, PenTool, Shield, BarChart } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function Header() {
   const [showInfoModal, setShowInfoModal] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navItems = [
     { path: '/regulations', icon: Database, label: 'Database' },
@@ -23,6 +24,7 @@ function Header() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             className="flex items-center gap-2"
+            onClick={() => navigate('/dashboard')}
           >
             <Package className="h-8 w-8 text-cyan-400" />
             <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
