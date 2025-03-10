@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 import { CloudUpload, Send, Info, Check, X, MessageCircle, FileText, Globe as GlobeIcon, Package, AlertTriangle, Calendar, Weight, DollarSign, Truck, BoxSelect, FileCheck } from 'lucide-react';
-import GlobeVisualization from '../components/Globe';
 import Header from '../components/header';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
 
@@ -24,11 +23,11 @@ function ItemImageCompliancePage() {
   const [arcsData, setArcsData] = useState([]);
   const [detected, setDetected] = useState([]);
   const [res, setRes] = useState([]);
+  const [syntheticLoading, setSyntheticLoading] = useState(false);
 
   // List of countries for the dropdown
   const countries = [
     'United States', 'Canada', 'Mexico', 'United Kingdom', 'France', 
-    'Germany', 'Japan', 'China', 'Australia', 'Brazil', 'India', 'Kuwait'
   ];
   const prepareChartData = () => {
     const relevanceData = res.map(item => ({
@@ -81,19 +80,19 @@ function ItemImageCompliancePage() {
     'Kuwait': { lat: 29.3759, lng: 47.9774 }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-      
-      // Create a preview
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+    const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        setSelectedFile(file);
+        
+        // Create a preview
+        const reader = new FileReader();
+        reader.onload = () => {
+          setPreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -111,9 +110,12 @@ function ItemImageCompliancePage() {
       formData.append('file', selectedFile);
   
       // Call API endpoint
-      const response = await fetch('http://localhost:3000/api/search_items', {
+      const response = await fetch('https://sensible-emu-highly.ngrok-free.app/api/search_items', {
         method: 'POST',
-        body: formData
+        body: formData,
+        headers:{
+          'ngrok-skip-browser-warning': 'true'
+        }
       });
   
       if (!response.ok) {
@@ -166,7 +168,7 @@ function ItemImageCompliancePage() {
     }
   };
 
-  const handleChatSubmit = (e) => {
+  const handleChatSubmit = async (e) => {
     e.preventDefault();
     
     if (!message.trim()) return;
@@ -176,33 +178,48 @@ function ItemImageCompliancePage() {
     setChatMessages([...chatMessages, userMessage]);
     setMessage('');
     
-    // Simulate bot response
-    setTimeout(() => {
-      let botResponse = '';
-      
-      // Simple rule-based responses
-      if (message.toLowerCase().includes('prohibited') || message.toLowerCase().includes('banned')) {
-        botResponse = `Each country has specific prohibited items. For ${destinationCountry || 'most countries'}, typically weapons, drugs, and certain food products are restricted. Would you like specific details about a country?`;
-      } else if (message.toLowerCase().includes('document') || message.toLowerCase().includes('paperwork')) {
-        botResponse = 'For international shipments, you typically need: a commercial invoice, packing list, and shipping declaration. Some countries may require additional certificates or permits for specific items.';
-      } else if (message.toLowerCase().includes('time') || message.toLowerCase().includes('long')) {
-        botResponse = 'Shipping times vary by destination. Express services take 2-5 days internationally, while standard shipping can take 1-3 weeks. Customs clearance can add additional delays.';
-      } else if (validationResults && message.toLowerCase().includes('why')) {
-        botResponse = validationResults.isCompliant ? 
-          'Your item appears to comply with destination country regulations based on our initial check. However, we always recommend verifying with the shipping carrier.' : 
-          `Your item may be restricted because ${destinationCountry} has regulations against items similar to what you're shipping. We recommend checking with customs or obtaining special permits.`;
-      } else {
-        botResponse = 'I can help with questions about shipping compliance, prohibited items, required documentation, or shipping timeframes. What specific information do you need?';
+    try {
+      // Prepare context for the AI
+      const context = `
+        Context:
+        - Source Country: ${sourceCountry}
+        - Destination Country: ${destinationCountry}
+        - Detected Items: ${detected.join(', ')}
+        - Compliance Status: ${validationResults ? (validationResults.isCompliant ? 'Compliant' : 'Non-compliant') : 'Unknown'}
+        
+        User Question: ${message}
+      `;
+
+      // Call Gemini API
+      const response = await fetch('https://free-horribly-perch.ngrok-free.app/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        },
+        body: JSON.stringify({ prompt: context }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response from AI');
       }
-      
-      const newBotMessage = { sender: 'bot', message: botResponse };
-      setChatMessages(prevMessages => [...prevMessages, newBotMessage]);
-      
-      // Scroll to bottom of chat
-      if (chatContainerRef.current) {
-        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-      }
-    }, 1000);
+
+      const data = await response.json();
+      const botMessage = { sender: 'bot', message: data.response };
+      setChatMessages(prevMessages => [...prevMessages, botMessage]);
+    } catch (error) {
+      console.error('Error:', error);
+      const errorMessage = { 
+        sender: 'bot', 
+        message: 'Sorry, I encountered an error. Please try again later.' 
+      };
+      setChatMessages(prevMessages => [...prevMessages, errorMessage]);
+    }
+
+    // Scroll to bottom of chat
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   };
 
   // For demo purposes - example detection results if no data is present
@@ -230,9 +247,6 @@ function ItemImageCompliancePage() {
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-blue-950 to-gray-900 relative">
       {/* Header */}
       <Header />
-      <div style={{ height: '400px', width: '100%', position: 'relative', marginBottom: '2rem' }}>
-        <GlobeVisualization arcsData={arcsData}/>
-      </div>
       
       <main className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -840,4 +854,4 @@ function ItemImageCompliancePage() {
   );
 }
 
-export default ItemImageCompliancePage;
+  export default ItemImageCompliancePage;

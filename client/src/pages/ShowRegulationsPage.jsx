@@ -28,6 +28,7 @@ const ShowRegulations = () => {
   };
 
   useEffect(() => {
+
     const fetchRegulations = async () => {
       try {
         // Format the JSON filename according to source_to_destination.json
@@ -110,11 +111,15 @@ const ShowRegulations = () => {
     setChatMessages(prev => [...prev, newUserMessage]);
 
     try {
-      const { data } = await axios.post('http://localhost:6001/api/chat', {
+      const { data } = await axios.post('https://saved-jackal-brief.ngrok-free.app/api/chat', {
         query: userInput,
         context: regulations[currentSection]?.['Simplified Form']?.join('\n') || regulations[currentSection]?.Content,
         section: regulations[currentSection]?.Section,
         chat_id: chatId // Send the chat ID if it exists
+      } , {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
       });
       
       if (data.success) {

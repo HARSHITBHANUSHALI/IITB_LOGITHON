@@ -22,7 +22,11 @@ function AdminPanel() {
 
   const fetchRoutes = async () => {
     try {
-      const response = await fetch('http://localhost:6002/api/admin/routes');
+      const response = await fetch('https://meerkat-welcome-remotely.ngrok-free.app/api/admin/routes' , {
+        headers:{
+          'ngrok-skip-browser-warning': 'true',
+        }
+      });
       const data = await response.json();
       setRoutes(data);
     } catch (error) {
@@ -33,7 +37,11 @@ function AdminPanel() {
 
   const fetchAllRules = async () => {
     try {
-      const response = await fetch('http://localhost:6002/api/admin/rules');
+      const response = await fetch('https://meerkat-welcome-remotely.ngrok-free.app/api/admin/rules' , {
+        headers:{
+          'ngrok-skip-browser-warning': 'true',
+        }
+      });
       const data = await response.json();
       setRules(data);
     } catch (error) {
@@ -44,7 +52,11 @@ function AdminPanel() {
 
   const fetchRulesForRoute = async (source, destination) => {
     try {
-      const response = await fetch(`http://localhost:6002/api/rules/${source}/${destination}`);
+      const response = await fetch(`https://meerkat-welcome-remotely.ngrok-free.app/api/rules/${source}/${destination}` , {
+        headers:{
+          'ngrok-skip-browser-warning': 'true',
+        }
+      });
       const data = await response.json();
       setSelectedRoute({ source, destination, rules: data.rules });
     } catch (error) {
@@ -64,10 +76,11 @@ function AdminPanel() {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:6002/api/rules', {
+      const response = await fetch('https://meerkat-welcome-remotely.ngrok-free.app/api/rules', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true',
         },
         body: JSON.stringify(newRule),
       });
@@ -101,10 +114,11 @@ function AdminPanel() {
     setIsLoading(true);
     
     try {
-      const response = await fetch(`http://localhost:6002/api/rules/${source}/${destination}`, {
+      const response = await fetch(`https://meerkat-welcome-remotely.ngrok-free.app/api/rules/${source}/${destination}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true',
         },
         body: JSON.stringify({ rule }),
       });

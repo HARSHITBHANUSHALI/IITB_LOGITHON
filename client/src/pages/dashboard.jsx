@@ -53,54 +53,68 @@ const ComplianceChecker = () => {
   const [selectedShipmentDetails, setSelectedShipmentDetails] = useState(null); // To store selected shipment details
   const [complianceStats, setComplianceStats] = useState(null);
   const [csvStats, setCsvStats] = useState(null);
+  const [syntheticLoading, setSyntheticLoading] = useState(false); // Add a new loading state for synthetic check
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Mock data for shipments, country restrictions, and notifications
-    setShipments([
-      { id: 'PKG-1234', source: 'India', destination: 'Germany', contents: 'Electronics', weight: '2.5', value: '450', status: 'compliant', documents: ['invoice', 'packing-list'] },
-      { id: 'PKG-2345', source: 'United States', destination: 'Japan', contents: 'Cosmetics', weight: '1.2', value: '230', status: 'warning', documents: ['invoice'] },
-      { id: 'PKG-3456', source: 'China', destination: 'Brazil', contents: 'Books', weight: '4.0', value: '120', status: 'non-compliant', documents: [] },
-      { id: 'PKG-4567', source: 'United Kingdom', destination: 'Canada', contents: 'Clothing', weight: '3.1', value: '350', status: 'compliant', documents: ['invoice', 'packing-list', 'certificate'] }
-    ]);
-
-    setCountryRestrictions({
-      'Brazil': ['Electronics without certification', 'Cosmetics without testing'],
-      'Japan': ['Food products without labels', 'Used clothing'],
-      'Germany': ['Products without CE marking'],
-      'Australia': ['Plant materials', 'Animal products without permits']
-    });
-
-    setNotifications([
-      { id: 1, message: 'Restricted item detected for PKG-2345', type: 'warning' },
-      { id: 2, message: 'Missing documents for PKG-3456', type: 'error' },
-      { id: 3, message: 'PKG-1234 cleared for shipment', type: 'success' }
-    ]);
-
-    // Fetch countries from API
-    const getCountries = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/countries');
-        setCountries(response.data.countries);
+        // Mock data for shipments, country restrictions, and notifications
+        setShipments([
+          { id: 'PKG-1234', source: 'India', destination: 'Germany', contents: 'Electronics', weight: '2.5', value: '450', status: 'compliant', documents: ['invoice', 'packing-list'] },
+          { id: 'PKG-2345', source: 'United States', destination: 'Japan', contents: 'Cosmetics', weight: '1.2', value: '230', status: 'warning', documents: ['invoice'] },
+          { id: 'PKG-3456', source: 'China', destination: 'Brazil', contents: 'Books', weight: '4.0', value: '120', status: 'non-compliant', documents: [] },
+          { id: 'PKG-4567', source: 'United Kingdom', destination: 'Canada', contents: 'Clothing', weight: '3.1', value: '350', status: 'compliant', documents: ['invoice', 'packing-list', 'certificate'] }
+        ]);
+  
+        setCountryRestrictions({
+          'Brazil': ['Electronics without certification', 'Cosmetics without testing'],
+          'Japan': ['Food products without labels', 'Used clothing'],
+          'Germany': ['Products without CE marking'],
+          'Australia': ['Plant materials', 'Animal products without permits']
+        });
+  
+        setNotifications([
+          { id: 1, message: 'Restricted item detected for PKG-2345', type: 'warning' },
+          { id: 2, message: 'Missing documents for PKG-3456', type: 'error' },
+          { id: 3, message: 'PKG-1234 cleared for shipment', type: 'success' }
+        ]);
+  
+        // Fetch countries from API
+        const countriesResponse = await axios.get('https://free-horribly-perch.ngrok-free.app/api/countries'  , {
+          headers:{
+            "ngrok-skip-browser-warning" : "true",
+          }
+        });
+        setCountries(countriesResponse.data.countries);
+  
       } catch (error) {
-        console.error('Error fetching countries:', error);
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false); // Set loading to false after all operations are done
       }
     };
-    getCountries();
+  
+    fetchData();
   }, []);
 
   // Check compliance for a single shipment
   const checkCompliance = async (shipment) => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:3000/api/check_financial_all', {
+      const response = await axios.post('https://sensible-emu-highly.ngrok-free.app/api/check_financial_all', {
         source: shipment.source,
         destination: shipment.destination,
         shipment_details: {
           item_name: shipment.contents,
           weight: shipment.weight,
-          value: shipment.value,
+          shipment_value_usd: shipment.value,
           documents: shipment.documents
         },
+      } , {
+        headers:{
+          "ngrok-skip-browser-warning" : "true",
+        }
       });
 
       setComplianceResults(response.data);
@@ -109,6 +123,83 @@ const ComplianceChecker = () => {
       console.error('Error checking compliance:', error);
     } finally {
       setLoading(false);
+    }
+  };
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-950 via-blue-950 to-gray-900">
+        <div className="flex items-center space-x-3">
+          <svg className="animate-spin h-8 w-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span className="text-lg text-blue-300">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+  const SyntheticCheckCsv = async () => {
+    setSyntheticLoading(true);
+    try {
+      const fileInput = document.querySelector('input[type="file"]');
+      const file = fileInput.files[0];
+      if (!file) {
+        console.error('No file selected');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await axios.post('https://meerkat-welcome-remotely.ngrok-free.app/api/check_bulk_custom', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          "ngrok-skip-browser-warning" : "true",
+        }
+      });
+
+      setComplianceResultsCsv(response.data);
+      processCsvStats(response.data);
+
+      // Update CSV data with compliance results
+      const updatedCsvData = csvData.map((row, index) => ({
+        ...row,
+        compliance_status: response.data.results[index].compliance_result.overall_compliance.compliant ? 'Compliant' : 'Non-Compliant',
+        risk_level: response.data.results[index].compliance_result.overall_compliance.overall_risk_level,
+        suggestions: response.data.results[index].compliance_result.overall_compliance.summary,
+        additional_info: JSON.stringify(response.data.results[index].compliance_result) // Store additional info for pop-up
+      }));
+      setCsvData(updatedCsvData);
+    } catch (error) {
+      console.error('Error checking compliance:', error);
+    } finally {
+      setSyntheticLoading(false);
+    }
+  }
+  const SyntheticCheck = async (shipment) => {
+    setSyntheticLoading(true);
+    try {
+      const response = await axios.post('https://meerkat-welcome-remotely.ngrok-free.app/api/check_compliance', {
+        source: shipment.source,
+        destination: shipment.destination,
+        shipment_details: {
+          item_name: shipment.contents,
+          weight: shipment.weight,
+          value: shipment.value,
+          documents: shipment.documents
+        },
+      } , {
+        headers : {
+          "ngrok-skip-browser-warning" : "true",
+        } 
+     });
+
+      setComplianceResults(response.data);
+      processComplianceData(response.data);
+    } catch (error) {
+      console.error('Error checking compliance:', error);
+    } finally {
+      setSyntheticLoading(false);
     }
   };
 
@@ -126,9 +217,10 @@ const ComplianceChecker = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await axios.post('http://localhost:3000/api/check_bulk', formData, {
+      const response = await axios.post('https://sensible-emu-highly.ngrok-free.app/api/check_bulk', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          "ngrok-skip-browser-warning" : "true",
         }
       });
 
@@ -144,6 +236,14 @@ const ComplianceChecker = () => {
         additional_info: JSON.stringify(response.data.results[index].compliance_result) // Store additional info for pop-up
       }));
       setCsvData(updatedCsvData);
+
+      const user = JSON.parse(localStorage.getItem('signup')); 
+      axios.post('https://likely-key-donkey.ngrok-free.app/api/ai_agent', { results: csvData, email: user?.email } , {
+        headers:{
+          "ngrok-skip-browser-warning" : "true",
+        }
+      })
+      .catch(err => console.error("Error calling AI agent:", err));
     } catch (error) {
       console.error('Error checking compliance:', error);
     } finally {
@@ -739,7 +839,7 @@ const ComplianceChecker = () => {
                     </div>
 
                     {/* Check Compliance Button */}
-                    <div className="flex justify-center">
+                    <div className="flex justify-center space-x-4">
                       <button
                         onClick={() => checkCompliance(newShipment)}
                         className="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold transform transition hover:scale-105 flex items-center"
@@ -757,6 +857,27 @@ const ComplianceChecker = () => {
                           <>
                             <AlertTriangle size={20} className="mr-2" />
                             Check Compliance
+                          </>
+                        )}
+                      </button>
+                      
+                      <button
+                        onClick={() => SyntheticCheck(newShipment)}
+                        className="px-6 py-3 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold transform transition hover:scale-105 flex items-center"
+                        disabled={syntheticLoading}
+                      >
+                        {syntheticLoading ? (
+                          <div className="flex items-center">
+                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Processing...
+                          </div>
+                        ) : (
+                          <>
+                            <AlertTriangle size={20} className="mr-2" />
+                            Synthetic Check
                           </>
                         )}
                       </button>
@@ -845,7 +966,7 @@ const ComplianceChecker = () => {
                         <div className="mt-4 space-y-4">
                           <div className="flex justify-between items-center">
                             <h3 className="text-sm font-medium text-gray-300">Uploaded CSV Data</h3>
-                            <div className="space-x-2">
+                            <div className="flex space-x-2">
                               <button
                                 onClick={checkComplianceCsv}
                                 className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm flex items-center"
@@ -866,10 +987,32 @@ const ComplianceChecker = () => {
                                   </>
                                 )}
                               </button>
+
+                              <button
+                                onClick={SyntheticCheckCsv}
+                                className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm flex items-center"
+                                disabled={syntheticLoading}
+                              >
+                                {syntheticLoading ? (
+                                  <div className="flex items-center">
+                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Processing...
+                                  </div>
+                                ) : (
+                                  <>
+                                    <AlertTriangle size={16} className="mr-1" />
+                                    Synthetic Check
+                                  </>
+                                )}
+                              </button>
+
                               {complianceResultsCsv && (
                                 <button
                                   onClick={downloadUpdatedCsv}
-                                  className="px-4 mt-3 py-2 rounded-lg bg-green-600 hover:bg-green-500 text-white text-sm flex items-center"
+                                  className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 text-white text-sm flex items-center"
                                 >
                                   <FileDown size={16} className="mr-1" />
                                   Download Results
@@ -971,142 +1114,134 @@ const ComplianceChecker = () => {
             </div>
 
             {/* Compliance Results */}
-            {complianceResults && (
-              <div className="bg-gray-900/30 backdrop-blur-sm rounded-xl shadow-xl overflow-hidden border border-blue-800">
-                <div className="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
-                  <h2 className="text-lg font-medium text-blue-300">Compliance Results</h2>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    complianceResults.overall_compliance.compliant ? 'bg-green-900 text-green-200' : 'bg-red-900 text-red-200'
-                  }`}>
-                    {complianceResults.overall_compliance.compliant ? 'Compliant' : 'Non-Compliant'}
-                  </span>
+            {complianceResults?.results && (
+              <div className="mt-8 space-y-6">
+                <h2 className="text-2xl font-bold text-blue-300">Compliance Results</h2>
+                <div className="space-y-4">
+                  {complianceResults.results.map((result, index) => (
+                    <div key={index} className="bg-gray-800 bg-opacity-50 rounded-lg p-4 border border-gray-700">
+                      <div
+                        className="flex items-center justify-between cursor-pointer"
+                        onClick={() => setExpandedResult(expandedResult === index ? null : index)}
+                      >
+                        <div className="flex items-center">
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                            result.compliance.compliant ? 'bg-green-500' :
+                            result.compliance.compliant === false ? 'bg-red-500' : 'bg-yellow-500'
+                          }`}>
+                            {result.compliance.compliant ? (
+                              <Check size={16} className="text-white" />
+                            ) : result.compliance.compliant === false ? (
+                              <X size={16} className="text-white" />
+                            ) : (
+                              <AlertTriangle size={16} className="text-white" />
+                            )}
+                          </div>
+                          <span className="ml-2 font-medium">{result.section}</span>
+                        </div>
+                        <button>
+                          {expandedResult === index ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                        </button>
+                      </div>
+                      {expandedResult === index && (
+                        <div className="mt-4 space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <span className="text-gray-400">Compliance Score:</span>
+                              <span className="ml-2 font-medium">{result.compliance.compliance_score}</span>
+                            </div>
+                            <div>
+                              <span className="text-gray-400">Risk Level:</span>
+                              <span className={`ml-2 font-medium ${
+                                result.compliance.risk_level === 'High' ? 'text-red-500' :
+                                result.compliance.risk_level === 'Medium' ? 'text-yellow-500' : 'text-green-500'
+                              }`}>
+                                {result.compliance.risk_level}
+                              </span>
+                            </div>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Officer Notes:</span>
+                            <p className="mt-1 text-gray-300">{result.compliance.officer_notes}</p>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Reasons:</span>
+                            <ul className="mt-1 list-disc list-inside text-gray-300">
+                              {result.compliance.reasons.map((reason, i) => (
+                                <li key={i}>{reason}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Suggestions:</span>
+                            <ul className="mt-1 list-disc list-inside text-gray-300">
+                              {result.compliance.suggestions.map((suggestion, i) => (
+                                <li key={i}>{suggestion}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Violations:</span>
+                            <ul className="mt-1 list-disc list-inside text-gray-300">
+                              {result.compliance.violations.map((violation, i) => (
+                                <li key={i}>{violation}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
-                <div className="p-6 space-y-4">
-                  {/* Overall compliance */}
-                  <div className="bg-gray-700 bg-opacity-30 rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-md font-medium text-blue-300">Overall Compliance</h3>
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        getStatusColor(complianceResults.overall_compliance.overall_risk_level)
-                      }`}>
-                        Risk Level: {complianceResults.overall_compliance.overall_risk_level}
-                      </span>
-                    </div>
-                    <p className="text-gray-300 text-sm mb-2">{complianceResults.overall_compliance.summary}</p>
-                    {complianceResults.overall_compliance.violations && complianceResults.overall_compliance.violations.length > 0 && (
-                      <div className="mt-3">
-                        <h4 className="text-sm font-medium text-red-300 mb-2">Violations:</h4>
-                        <ul className="list-disc pl-5 text-sm text-red-200 space-y-1">
-                          {complianceResults.overall_compliance.violations.map((violation, idx) => (
-                            <li key={idx}>{violation}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {complianceResults.overall_compliance.suggestions && complianceResults.overall_compliance.suggestions.length > 0 && (
-                      <div className="mt-3">
-                        <h4 className="text-sm font-medium text-green-300 mb-2">Suggestions:</h4>
-                        <ul className="list-disc pl-5 text-sm text-green-200 space-y-1">
-                          {complianceResults.overall_compliance.suggestions.map((suggestion, idx) => (
-                            <li key={idx}>{suggestion}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
+              </div>
+            )}
 
-                  {/* Document compliance */}
-                  <div className="bg-gray-700 bg-opacity-30 rounded-lg p-4 relative">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-md font-medium text-blue-300">Document Compliance</h3>
-                      <button 
-                        onClick={() => setExpandedResult(expandedResult === 'document' ? null : 'document')}
-                        className="text-blue-300 hover:text-blue-200"
-                      >
-                        {expandedResult === 'document' ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                      </button>
-                    </div>
-                    
-                    <div className={`${expandedResult === 'document' ? 'block' : 'hidden'}`}>
-                      {complianceResults.document_compliance.required_documents && (
-                        <div className="mb-3">
-                          <h4 className="text-sm font-medium text-gray-300 mb-2">Required Documents:</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {complianceResults.document_compliance.required_documents.map((doc, idx) => (
-                              <span key={idx} className="px-2 py-1 bg-gray-600 rounded-md text-xs text-gray-200 flex items-center">
-                                <FileText size={12} className="mr-1" />
-                                {doc}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {complianceResults.document_compliance.missing_documents && complianceResults.document_compliance.missing_documents.length > 0 && (
-                        <div className="mb-3">
-                          <h4 className="text-sm font-medium text-red-300 mb-2">Missing Documents:</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {complianceResults.document_compliance.missing_documents.map((doc, idx) => (
-                              <span key={idx} className="px-2 py-1 bg-red-900 bg-opacity-30 rounded-md text-xs text-red-200 flex items-center">
-                                <FileText size={12} className="mr-1" />
-                                {doc}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      
-                      <p className="text-sm text-gray-300">{complianceResults.document_compliance.document_notes}</p>
-                    </div>
-                  </div>
-
-                  {/* Item compliance */}
-                  <div className="bg-gray-700 bg-opacity-30 rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-md font-medium text-blue-300">Item Compliance</h3>
-                      <button 
-                        onClick={() => setExpandedResult(expandedResult === 'item' ? null : 'item')}
-                        className="text-blue-300 hover:text-blue-200"
-                      >
-                        {expandedResult === 'item' ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                      </button>
-                    </div>
-                    
-                    <div className={`${expandedResult === 'item' ? 'block' : 'hidden'}`}>
-                      {complianceResults.item_compliance.restricted_items && complianceResults.item_compliance.restricted_items.length > 0 && (
-                        <div className="mb-3">
-                          <h4 className="text-sm font-medium text-yellow-300 mb-2">Restricted Items:</h4>
-                          <ul className="list-disc pl-5 text-sm text-yellow-200 space-y-1">
-                            {complianceResults.item_compliance.restricted_items.map((item, idx) => (
-                              <li key={idx}>{item}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      
-                      {complianceResults.item_compliance.prohibited_items && complianceResults.item_compliance.prohibited_items.length > 0 && (
-                        <div className="mb-3">
-                          <h4 className="text-sm font-medium text-red-300 mb-2">Prohibited Items:</h4>
-                          <ul className="list-disc pl-5 text-sm text-red-200 space-y-1">
-                            {complianceResults.item_compliance.prohibited_items.map((item, idx) => (
-                              <li key={idx}>{item}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      
-                      <p className="text-sm text-gray-300">{complianceResults.item_compliance.item_notes}</p>
-                    </div>
-                  </div>
-
-                  {/* Officer notes */}
-                  {complianceResults.overall_compliance.officer_notes && (
-                    <div className="bg-blue-900 bg-opacity-30 rounded-lg p-4 border border-blue-800">
-                      <h4 className="text-sm font-medium text-blue-300 mb-2">Officer Notes:</h4>
-                      <p className="text-sm text-gray-300">{complianceResults.overall_compliance.officer_notes}</p>
+            {/* Item compliance - Add null check */}
+            {complianceResults?.item_compliance && (
+              <div className="bg-gray-700 bg-opacity-30 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-md font-medium text-blue-300">Item Compliance</h3>
+                  <button 
+                    onClick={() => setExpandedResult(expandedResult === 'item' ? null : 'item')}
+                    className="text-blue-300 hover:text-blue-200"
+                  >
+                    {expandedResult === 'item' ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                  </button>
+                </div>
+                
+                <div className={`${expandedResult === 'item' ? 'block' : 'hidden'}`}>
+                  {complianceResults.item_compliance.restricted_items?.length > 0 && (
+                    <div className="mb-3">
+                      <h4 className="text-sm font-medium text-yellow-300 mb-2">Restricted Items:</h4>
+                      <ul className="list-disc pl-5 text-sm text-yellow-200 space-y-1">
+                        {complianceResults.item_compliance.restricted_items.map((item, idx) => (
+                          <li key={idx}>{item}</li>
+                        ))}
+                      </ul>
                     </div>
                   )}
+                  
+                  {complianceResults.compliance.prohibited_items?.length > 0 && (
+                    <div className="mb-3">
+                      <h4 className="text-sm font-medium text-red-300 mb-2">Prohibited Items:</h4>
+                      <ul className="list-disc pl-5 text-sm text-red-200 space-y-1">
+                        {complianceResults.item_compliance.prohibited_items.map((item, idx) => (
+                          <li key={idx}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+        
                 </div>
+              </div>
+            )}
+
+            {/* Officer notes - Add null check */}
+            {complianceResults?.compliance?.officer_notes && (
+              <div className="bg-blue-900 bg-opacity-30 rounded-lg p-4 border border-blue-800">
+                <h4 className="text-sm font-medium text-blue-300 mb-2">Officer Notes:</h4>
+                <p className="text-sm text-gray-300">{complianceResults.overall_compliance.officer_notes}</p>
               </div>
             )}
           </div>
@@ -1168,59 +1303,59 @@ const ComplianceChecker = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Popup for detailed information */}
-      {showPopup && selectedShipmentDetails && (
-        <CompliancePopup
-          details={selectedShipmentDetails}
-          onClose={() => {
-            setShowPopup(false);
-            setSelectedShipmentDetails(null);
-          }}
-        />
-      )}
+        {/* Popup for detailed information */}
+        {showPopup && selectedShipmentDetails && (
+          <CompliancePopup
+            details={selectedShipmentDetails}
+            onClose={() => {
+              setShowPopup(false);
+              setSelectedShipmentDetails(null);
+            }}
+          />
+        )}
 
-      {activeTab === 'stats' && (
-        <div className="container mx-auto px-4 py-8 space-y-8">
-          <div className="bg-gray-900/30 backdrop-blur-sm border border-blue-800 rounded-xl p-6">
-            <h2 className="text-2xl font-semibold text-slate-200 mb-8">Compliance Analytics</h2>
-            
-            {/* Single Shipment Analysis */}
-            {complianceStats && (
-              <div className="mb-12">
-                <h3 className="text-xl font-medium text-slate-300 mb-6 flex items-center">
-                  <Activity className="mr-2 text-blue-400" size={24} />
-                  Single Shipment Analysis
-                </h3>
-                <ComplianceGraphs data={complianceStats} type="single" />
-              </div>
-            )}
-
-            {/* Bulk Analysis */}
-            {csvStats && (
-              <div>
-                <h3 className="text-xl font-medium text-slate-300 mb-6 flex items-center">
-                  <Package className="mr-2 text-blue-400" size={24} />
-                  Bulk Analysis
-                </h3>
-                <ComplianceGraphs data={csvStats} type="bulk" />
-              </div>
-            )}
-
-            {!complianceStats && !csvStats && (
-              <div className="text-center py-12">
-                <div className="bg-slate-800/80 rounded-lg p-8 max-w-lg mx-auto">
-                  <Activity className="mx-auto h-12 w-12 text-slate-400 mb-4" />
-                  <p className="text-slate-400 text-lg">
-                    No analysis data available. Check compliance for shipments to see analytics.
-                  </p>
+        {activeTab === 'stats' && (
+          <div className="container mx-auto px-4 py-8 space-y-8">
+            <div className="bg-gray-900/30 backdrop-blur-sm border border-blue-800 rounded-xl p-6">
+              <h2 className="text-2xl font-semibold text-slate-200 mb-8">Compliance Analytics</h2>
+              
+              {/* Single Shipment Analysis */}
+              {complianceStats && (
+                <div className="mb-12">
+                  <h3 className="text-xl font-medium text-slate-300 mb-6 flex items-center">
+                    <Activity className="mr-2 text-blue-400" size={24} />
+                    Single Shipment Analysis
+                  </h3>
+                  <ComplianceGraphs data={complianceStats} type="single" />
                 </div>
-              </div>
-            )}
+              )}
+
+              {/* Bulk Analysis */}
+              {csvStats && (
+                <div>
+                  <h3 className="text-xl font-medium text-slate-300 mb-6 flex items-center">
+                    <Package className="mr-2 text-blue-400" size={24} />
+                    Bulk Analysis
+                  </h3>
+                  <ComplianceGraphs data={csvStats} type="bulk" />
+                </div>
+              )}
+
+              {!complianceStats && !csvStats && (
+                <div className="text-center py-12">
+                  <div className="bg-slate-800/80 rounded-lg p-8 max-w-lg mx-auto">
+                    <Activity className="mx-auto h-12 w-12 text-slate-400 mb-4" />
+                    <p className="text-slate-400 text-lg">
+                      No analysis data available. Check compliance for shipments to see analytics.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
