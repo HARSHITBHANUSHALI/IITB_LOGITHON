@@ -60,7 +60,7 @@ PDF_PATH = os.path.join(DATA_DIR, 'fedex-international-connect-country-region-sp
 JSON_OUTPUT_PATH = os.path.join(DATA_DIR, 'fedex_country_restrictions.json')
 
 # Gemini API Configuration
-GEMINI_API_KEY = "AIzaSyDeYF3DqZSrkpOZy3cDOZ822GYQO0ZAIGA"
+GEMINI_API_KEY = ""
 genai.configure(api_key=GEMINI_API_KEY)
 
 def get_embedding_model():
